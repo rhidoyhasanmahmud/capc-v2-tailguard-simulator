@@ -1,0 +1,67 @@
+# PRIMARY THESIS CONFIGURATION TEMPLATE.
+# Fill the CAPC values only after the Chapter 4 parameter-freezing decision is complete.
+research:
+  mode: primary
+  require_frozen_capc: true
+  label: thesis-primary
+
+simulation:
+  duration_s: 1800.0
+  warmup_s: 180.0
+
+workload:
+  lambda_normal: 20.0
+  lambda_burst: 60.0
+  q_normal_to_burst: 0.02
+  q_burst_to_normal: 0.10
+  initial_state: NORMAL
+
+sharding:
+  shard_count: 4
+  cross_shard_ratio: 0.10
+  two_shard_probability: 0.80
+  d_min: 2
+  d_max: 3
+
+priority:
+  high: 0.20
+  medium: 0.50
+  low: 0.30
+
+coordination:
+  workers: 2
+  service_time_ms:
+    min: 40.0
+    max: 60.0
+
+capc:
+  arrival_window_s: null
+  lock_window_s: null
+  lambda_ref: null
+  queue_ref: null
+  contention_weights:
+    arrival: null
+    queue: null
+    dependency: null
+    lock: null
+  aging_horizon_s: null
+  ranking_weights:
+    urgency: null
+    aging: null
+    dependency: null
+    lock_pressure: null
+  gamma: null
+  thresholds:
+    low_medium: null
+    medium_high: null
+
+matrix:
+  shard_counts: [4, 8, 16]
+  cross_shard_ratios: [0.10, 0.30, 0.50]
+  workers: [2, 4]
+  schedulers:
+    - diagnostic_fifo
+    - static_atomic_fifo
+    - capc
+    - capc_no_contention
+    - capc_no_priority
