@@ -33,6 +33,15 @@ class Transaction:
     active_lock_conflicts_at_entry: int | None = None
     completed_by_cutoff: bool = False
 
+    # Stage B observability only. These fields do not participate in scheduling.
+    eligible_observation_count: int = 0
+    bypass_count: int = 0
+    consecutive_bypass_count: int = 0
+    max_consecutive_bypass_count: int = 0
+    last_eligible_time: float | None = None
+    last_bypassed_time: float | None = None
+    bypass_count_at_service_start: int | None = None
+
     @property
     def transaction_id(self) -> int:
         return self.spec.transaction_id
