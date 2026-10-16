@@ -1,0 +1,67 @@
+# DEVELOPMENT / SMOKE-TEST CONFIGURATION ONLY.
+# These CAPC numerical values are NOT thesis-frozen research parameters.
+research:
+  mode: development
+  require_frozen_capc: false
+  label: dev-smoke
+
+simulation:
+  duration_s: 30.0
+  warmup_s: 3.0
+
+workload:
+  lambda_normal: 20.0
+  lambda_burst: 60.0
+  q_normal_to_burst: 0.02
+  q_burst_to_normal: 0.10
+  initial_state: NORMAL
+
+sharding:
+  shard_count: 4
+  cross_shard_ratio: 0.30
+  two_shard_probability: 0.80
+  d_min: 2
+  d_max: 3
+
+priority:
+  high: 0.20
+  medium: 0.50
+  low: 0.30
+
+coordination:
+  workers: 2
+  service_time_ms:
+    min: 40.0
+    max: 60.0
+
+capc:
+  arrival_window_s: 5.0
+  lock_window_s: 5.0
+  lambda_ref: 30.0
+  queue_ref: 25.0
+  contention_weights:
+    arrival: 0.25
+    queue: 0.25
+    dependency: 0.25
+    lock: 0.25
+  aging_horizon_s: 1.0
+  ranking_weights:
+    urgency: 0.35
+    aging: 0.30
+    dependency: 0.20
+    lock_pressure: 0.15
+  gamma: 1.0
+  thresholds:
+    low_medium: 0.33
+    medium_high: 0.66
+
+matrix:
+  shard_counts: [4, 8, 16]
+  cross_shard_ratios: [0.10, 0.30, 0.50]
+  workers: [2, 4]
+  schedulers:
+    - diagnostic_fifo
+    - static_atomic_fifo
+    - capc
+    - capc_no_contention
+    - capc_no_priority
