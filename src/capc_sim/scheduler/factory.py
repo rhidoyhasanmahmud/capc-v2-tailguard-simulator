@@ -5,6 +5,7 @@ from .capc_no_contention import CAPCNoContentionScheduler
 from .capc_no_priority import CAPCNoPriorityScheduler
 from .diagnostic_fifo import DiagnosticFIFOScheduler
 from .static_atomic_fifo import StaticAtomicFIFOScheduler
+from .tailguard import TailGuardScheduler
 
 
 SCHEDULERS = {
@@ -13,6 +14,7 @@ SCHEDULERS = {
     "capc": CAPCScheduler,
     "capc_no_contention": CAPCNoContentionScheduler,
     "capc_no_priority": CAPCNoPriorityScheduler,
+    "tailguard": TailGuardScheduler,
 }
 
 

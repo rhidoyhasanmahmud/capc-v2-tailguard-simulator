@@ -18,7 +18,7 @@ from capc_sim.workload.trace import Trace
 from .recorder import MetricsRecorder
 
 
-OUTPUT_SCHEMA_VERSION = 2
+OUTPUT_SCHEMA_VERSION = 3
 
 
 def git_commit() -> str:
@@ -95,6 +95,13 @@ def transaction_rows(
             "arrival_rate_at_entry": tx.arrival_rate_at_entry,
             "active_lock_conflicts_at_entry": tx.active_lock_conflicts_at_entry,
             "completed_by_cutoff": tx.completed_by_cutoff,
+            "eligible_observation_count": tx.eligible_observation_count,
+            "bypass_count": tx.bypass_count,
+            "consecutive_bypass_count": tx.consecutive_bypass_count,
+            "max_consecutive_bypass_count": tx.max_consecutive_bypass_count,
+            "last_eligible_time": tx.last_eligible_time,
+            "last_bypassed_time": tx.last_bypassed_time,
+            "bypass_count_at_service_start": tx.bypass_count_at_service_start,
         })
     return rows
 

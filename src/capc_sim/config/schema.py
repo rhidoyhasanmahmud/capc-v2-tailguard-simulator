@@ -119,6 +119,12 @@ class CapcConfig:
 
 
 @dataclass(frozen=True)
+class TailGuardConfig:
+    # Intentionally optional until the calibration protocol freezes a value.
+    bypass_threshold: int | None = None
+
+
+@dataclass(frozen=True)
 class MatrixConfig:
     shard_counts: tuple[int, ...] = (4, 8, 16)
     cross_shard_ratios: tuple[float, ...] = (0.10, 0.30, 0.50)
@@ -141,6 +147,7 @@ class ExperimentConfig:
     priority: PriorityConfig
     coordination: CoordinationConfig
     capc: CapcConfig
+    tailguard: TailGuardConfig = field(default_factory=TailGuardConfig)
     matrix: MatrixConfig = field(default_factory=MatrixConfig)
 
     def with_condition(self, shard_count: int, cross_shard_ratio: float, workers: int) -> "ExperimentConfig":
@@ -165,6 +172,7 @@ def from_dict(data: Mapping[str, Any]) -> ExperimentConfig:
     priority = _req(data, "priority")
     coordination = _req(data, "coordination")
     capc = _req(data, "capc")
+    tailguard = data.get("tailguard", {})
     matrix = data.get("matrix", {})
 
     cfg = ExperimentConfig(
@@ -214,6 +222,13 @@ def from_dict(data: Mapping[str, Any]) -> ExperimentConfig:
             gamma=capc.get("gamma"),
             thresholds=Thresholds(**_req(capc, "thresholds")),
         ),
+        tailguard=TailGuardConfig(
+            bypass_threshold=(
+                None
+                if tailguard.get("bypass_threshold") is None
+                else int(tailguard["bypass_threshold"])
+            ),
+        ),
         matrix=MatrixConfig(
             shard_counts=tuple(int(x) for x in matrix.get("shard_counts", (4, 8, 16))),
             cross_shard_ratios=tuple(float(x) for x in matrix.get("cross_shard_ratios", (0.1, 0.3, 0.5))),
@@ -253,6 +268,11 @@ def validate(cfg: ExperimentConfig) -> None:
         raise ConfigError("priority probabilities must be non-negative and sum to 1")
     if cfg.coordination.workers <= 0:
         raise ConfigError("coordination.workers must be > 0")
+    if (
+        cfg.tailguard.bypass_threshold is not None
+        and cfg.tailguard.bypass_threshold <= 0
+    ):
+        raise ConfigError("tailguard.bypass_threshold must be > 0 when configured")
     if cfg.coordination.service_time_ms.min <= 0 or cfg.coordination.service_time_ms.max < cfg.coordination.service_time_ms.min:
         raise ConfigError("invalid service_time_ms range")
 

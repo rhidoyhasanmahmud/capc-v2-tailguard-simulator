@@ -11,3 +11,4 @@ results/
 artifacts/
 .DS_Store
 .env
+.idea/

@@ -154,8 +154,10 @@ class Simulator:
     def _dispatch(self, now: float) -> None:
         while self.workers.free_count > 0 and self.queue:
             if self.scheduler.matched_atomic:
-                eligible_count = len(self.state.eligible())
+                eligible = self.state.eligible()
+                eligible_count = len(eligible)
             else:
+                eligible = []
                 eligible_count = len(self.queue)
             self.recorder.record_dispatch_snapshot(
                 now=now,
@@ -172,6 +174,27 @@ class Simulator:
                 break
 
             if self.scheduler.matched_atomic:
+                if tx not in eligible:
+                    raise AssertionError("Matched atomic scheduler returned an ineligible transaction")
+
+                # Stage B observability: record eligible-but-not-selected events.
+                # These counters are diagnostic only and never affect selection.
+                for candidate in eligible:
+                    candidate.eligible_observation_count += 1
+                    candidate.last_eligible_time = now
+
+                    if candidate is tx:
+                        candidate.bypass_count_at_service_start = candidate.bypass_count
+                        candidate.consecutive_bypass_count = 0
+                    else:
+                        candidate.bypass_count += 1
+                        candidate.consecutive_bypass_count += 1
+                        candidate.max_consecutive_bypass_count = max(
+                            candidate.max_consecutive_bypass_count,
+                            candidate.consecutive_bypass_count,
+                        )
+                        candidate.last_bypassed_time = now
+
                 if not self.lock_manager.can_acquire_all(tx.required_shards):
                     raise AssertionError("Matched atomic scheduler returned an ineligible transaction")
                 self.lock_manager.acquire_all(tx.transaction_id, tx.required_shards, now)
