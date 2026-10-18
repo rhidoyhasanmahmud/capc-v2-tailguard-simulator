@@ -89,10 +89,13 @@ def _planned_manifest(
     cross_shard_ratios: tuple[float, ...],
     workers: tuple[int, ...],
     treatments: tuple[CalibrationTreatment, ...],
+    phase: str = "calibration",
 ) -> dict:
+    if phase not in ("calibration", "internal_validation"):
+        raise ValueError(f"Unsupported experiment phase: {phase}")
     return {
         "protocol_version": CALIBRATION_PROTOCOL_VERSION,
-        "phase": "calibration",
+        "phase": phase,
         "base_config_hash": config_hash(config),
         "research_mode": config.research.mode,
         "research_label": config.research.label,
@@ -245,6 +248,7 @@ def run_calibration(
     workers: tuple[int, ...] | None = None,
     resume: bool = False,
     fail_fast: bool = True,
+    phase: str = "calibration",
 ) -> pd.DataFrame:
     """Generate frozen TailGuard calibration evidence.
 
@@ -284,6 +288,7 @@ def run_calibration(
         cross_shard_ratios=cross_shard_ratios,
         workers=workers,
         treatments=treatments,
+        phase=phase,
     )
 
     _prepare_output(
