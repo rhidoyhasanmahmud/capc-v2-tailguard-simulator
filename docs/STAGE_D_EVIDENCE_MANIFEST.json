@@ -1,0 +1,57 @@
+{
+  "stage": "D",
+  "status": "calibration_evidence_only_not_frozen",
+  "generated_at_utc": "2026-10-18T06:10:12.568423+00:00",
+  "calibration_seeds": [
+    1001,
+    1030
+  ],
+  "planned_runs": 4320,
+  "analysis_git_commit": "1fe8acc21ef9cdcdd08d0c911cee487ae42c4d09",
+  "python": "3.14.0",
+  "numpy": "2.5.4",
+  "pandas": "3.0.6",
+  "artifacts": [
+    {
+      "path": "results/tailguard_calibration/calibration_manifest.json",
+      "size_bytes": 1747,
+      "sha256": "9d6455d6b91c5ab0e1db25d7ca1bae8c696324ff93c41aa82e272d2e499dac8c"
+    },
+    {
+      "path": "results/tailguard_calibration/calibration_summary.csv",
+      "size_bytes": 4116655,
+      "sha256": "c380eb719dbe4e6744da2b6ba6cffdb895214100c42756cb23e54f9c88270da6"
+    },
+    {
+      "path": "results/tailguard_calibration/pair_integrity.csv",
+      "size_bytes": 103454,
+      "sha256": "d5a50f118962561151fc84224d96fdc6fbf469c284e4b79b6bb7022791e8bcc8"
+    },
+    {
+      "path": "results/tailguard_calibration/analysis_d3_2_priority_runs.csv",
+      "size_bytes": 1081709,
+      "sha256": "6ec61faf5060fbe584172e3f05f9f980fc3b1582262a20f39406ff3a7a5c8a13"
+    },
+    {
+      "path": "results/tailguard_calibration/analysis_d3_2_priority_comparison.csv",
+      "size_bytes": 1482,
+      "sha256": "90e45f382fc16d091ab5f5a98dae2fecc6916214bd01ecfbc070a4017df57805"
+    },
+    {
+      "path": "results/tailguard_calibration/analysis_d3_3_starvation_runs.csv",
+      "size_bytes": 327956,
+      "sha256": "fb08419d7ba5c0a5a3b8ebc8cdf3a5e25981ddaa9059d36a356c5be675a66138"
+    },
+    {
+      "path": "results/tailguard_calibration/analysis_d3_3_starvation_comparison.csv",
+      "size_bytes": 1373,
+      "sha256": "cc11d97e129e137e490f38a31680cc3323e769dbacb2153171054adb3894b1d7"
+    },
+    {
+      "path": "results/tailguard_calibration/analysis_d3_5_bootstrap.csv",
+      "size_bytes": 1280,
+      "sha256": "180e2c849a3f59a15cd55703994bc5d7b4b159ec059dce72514f8cd9cf216be4"
+    }
+  ],
+  "note": "Checksums cover listed summary and analysis files only. Raw transaction and decision traces are not included. No threshold is selected or frozen."
+}
